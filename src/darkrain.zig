@@ -14,10 +14,35 @@ pub const Engine = struct {
 pub const TransportControl = struct {
     transportState: TransportState = undefined,
     
+    pub fn isPlaying(self: @This()) bool {
+        _ = self;
+        return false;
+        //var ph = getNodePlayHead() orelse false;
+        //return ph.isPlaying();
+    }
+    const Self = @This();
+    pub fn stop(self: *Self,discardRecordings: bool, clearDevices: bool) void {
+        self.transportState.DiscardRecordings = discardRecordings;
+        self.transportState.ClearDevices = clearDevices; 
+        self.transportState.CanSendMMCStop = true;
+        self.transportState.InvertToStartPosSelection = false;
+        self.transportState.Playing = false;
+    }
+
+    pub fn play(self: *Self, justSendMMCIfEndabled: bool) void {
+        self.transportState.JustSendMMCIfEnabled = justSendMMCIfEndabled;
+        self.transportState.Playing = true;
+    }
+    
 };
 
 pub const TransportState = struct {
     Playing: bool = undefined,    
+    DiscardRecordings: bool = undefined,
+    ClearDevices: bool = undefined,
+    CanSendMMCStop: bool = undefined, 
+    InvertToStartPosSelection: bool = undefined,
+    JustSendMMCIfEnabled: bool = undefined,
 };
 
 pub const EditTimeRange = struct {

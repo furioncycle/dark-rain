@@ -25,7 +25,11 @@ fn addExampleData(file: *std.fs.File) !void {
 
 pub fn main() !void {
  
-  //First assumtion new no editfile existing 
+  var playButton: *zgt.Button_Impl  = undefined;
+  var plugins: *zgt.Button_Impl = undefined;
+  var settings: *zgt.Button_Impl = undefined;
+  var editName = zgt.Label(.{ .text = "No Edit Loaded."});  //First assumtion new no editfile existing 
+  
   var tmpDir = std.testing.tmpDir(.{});
   defer tmpDir.cleanup();
 
@@ -38,9 +42,17 @@ pub fn main() !void {
   
   //TODO Add changelistener for edit transport
     
-  
   var clip = Helper.loadAudioFileAsClip(edit,&file,"temp");
-  _ = clip;
+  _ = Helper.loopAroundClip(@TypeOf(clip),&clip);
+  editName.setText("Demo song");
+  
+  playButton = &zgt.Button( .{.label = "Play/Pause", .onclick = togglePlay,});
+  plugins = &zgt.Button(.{ .label = "Plugins",   .onclick = pluginScan  });
+  settings = &zgt.Button(.{ .label = "Settings",  .onclick = deviceSettings });  //        Helper.togglePlay(edit),
+    
+  try updatePlayButton(playButton);
+    
+  //TODO set timer in hertz startTimerHz(5);
   // GUI 
   try zgt.backend.init();
 
@@ -48,10 +60,10 @@ pub fn main() !void {
     try window.set(
         zgt.Column(.{}, .{
             zgt.Row(.{}, .{
-                zgt.Button(.{ .label = "Plugins",   .onclick = buttonClicked }),
-                zgt.Button(.{ .label = "Settings",  .onclick = buttonClicked }),
-                zgt.Button(.{ .label = "Play/Pause", .onclick = updatePlayButton }),
-                zgt.TextField( .{.text = "No Edit Loaded"}),
+                plugins,                
+                settings,
+                playButton,
+                editName,
                 zgt.TextField( .{.text = ""}), //Need a timer for this
             }),
         })
@@ -61,7 +73,21 @@ pub fn main() !void {
     window.show();
     zgt.runEventLoop();
 
-    //How to resize everything?
+}
+
+fn pluginScan(button: *zgt.Button_Impl) !void {
+    _ = button; 
+    
+}
+
+fn deviceSettings(button: *zgt.Button_Impl) !void {
+    _ = button;
+    Helper.showAudioDeviceSettings(&engine);
+}
+
+fn togglePlay(button: *zgt.Button_Impl) !void {
+    _ = button;
+    Helper.togglePlay(edit);
 }
 
 fn updatePlayButton(button: *zgt.Button_Impl) !void {

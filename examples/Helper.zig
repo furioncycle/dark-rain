@@ -1,6 +1,7 @@
 const std = @import("std");
 const WavAudioClip = @import("darkrain").WavAudioClip;
 const Edit = @import("darkrain").Edit;
+const Engine = @import("darkrain").Engine;
 const AudioTrack = @import("darkrain").AudioTrack; 
 const dr = @import("darkrain");
 
@@ -34,4 +35,22 @@ pub fn loadAudioFileAsClip(edit: *Edit.Edit, file: *std.fs.File, fileName: []con
    }
    
    return WavAudioClip{};
+}
+
+pub fn loopAroundClip(comptime clip_type: type, clip: *clip_type) *clip_type {
+   return clip;
+}
+
+pub fn togglePlay(edit: *Edit.Edit) void {
+
+   if(edit.transport.isPlaying()){
+      edit.transport.stop(false,false);      
+   }else {
+      edit.transport.play(false);
+   }
+}
+
+//TODO create another window dialoge for audio devices
+pub fn showAudioDeviceSettings(engine: *Engine) void {
+   _ = engine;
 }
