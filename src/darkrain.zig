@@ -6,6 +6,8 @@ pub const WavAudioClip = @import("wavaudioclip.zig");
 
 pub const Edit = @import("edit.zig");
 
+pub const AudioDevice = @import("audiodevice.zig");
+
 pub const Engine = struct {
     ProjectName: []const u8,
    
@@ -34,6 +36,12 @@ pub const TransportControl = struct {
         self.transportState.Playing = true;
     }
     
+    pub fn stopIfRecording(self: *Self) void {
+        if(self.transportState.IsRecording) {
+            self.stop(false,false);
+        }
+    }
+    
 };
 
 pub const TransportState = struct {
@@ -43,6 +51,7 @@ pub const TransportState = struct {
     CanSendMMCStop: bool = undefined, 
     InvertToStartPosSelection: bool = undefined,
     JustSendMMCIfEnabled: bool = undefined,
+    IsRecording: bool = undefined,
 };
 
 pub const EditTimeRange = struct {

@@ -14,8 +14,9 @@ pub const Edit = struct {
       const Self = @This() ;
       
       pub fn ensureNumberOfAudioTracks(self: *Self,minimumNumTracks: usize) void {
-            _ = self;
-            _ = minimumNumTracks;
+            while(self.getAudioTracks() < minimumNumTracks){
+                self.transport.stopIfRecording();
+            }
       }
     
       pub fn InsertNewAudioTracks(self: *Self, track: Track, sm: *SelectionManager) void {
@@ -23,6 +24,11 @@ pub const Edit = struct {
           _ = track;
           _ = sm;
       }   
+      
+     pub fn getAudioTracks(self: *Self) usize {
+        _ = self;
+        return 0;
+    }
 };
 
 pub fn createEmptyEdit(engine: *Engine, editFile: *std.fs.File) *Edit{

@@ -17,6 +17,7 @@ const Helper = @import("Helper.zig");
 var editFile: *std.fs.File = undefined;
 
 var engine = Engine{.ProjectName = "PlaybackDemo"};
+
 var edit: *Edit.Edit = undefined;
 
 fn addExampleData(file: *std.fs.File) !void {
@@ -43,7 +44,9 @@ pub fn main() !void {
   //TODO Add changelistener for edit transport
     
   var clip = Helper.loadAudioFileAsClip(edit,&file,"temp");
+
   _ = Helper.loopAroundClip(@TypeOf(clip),&clip);
+  
   editName.setText("Demo song");
   
   playButton = &zgt.Button( .{.label = "Play/Pause", .onclick = togglePlay,});
@@ -53,6 +56,7 @@ pub fn main() !void {
   try updatePlayButton(playButton);
     
   //TODO set timer in hertz startTimerHz(5);
+
   // GUI 
   try zgt.backend.init();
 
@@ -98,6 +102,3 @@ fn updatePlayButton(button: *zgt.Button_Impl) !void {
     }
 }
 
-fn buttonClicked(button: *zgt.Button_Impl) !void {
-    std.log.info("You clicked button with text {s}", .{button.getLabel()});
-}
